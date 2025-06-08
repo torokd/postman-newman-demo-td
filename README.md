@@ -23,12 +23,22 @@ There are two main ways to use this project:
 
 ### Option 2 – Run it with newman
 
-1. git clone https://github.com/torokd/postman-newman-demo-td.git
-2. cd postman-newman-demo-td
-3. npm install
-4. Execute a test
 ```bash 
-npm run test:api
+git clone https://github.com/torokd/postman-newman-demo-td.git
+```
+
+```bash 
+cd postman-newman-demo-td
+```
+
+```bash 
+npm install
+```
+
+```bash npm run test:api
+```
+OR
+```bash
 npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 ```
 OR 
@@ -49,7 +59,13 @@ sudo npm install -g newman
 
 ```bash
 git clone https://github.com/torokd/postman-newman-demo-td.git
+```
+```bash 
 cd postman-newman-demo-td
+```
+```bash
 docker build -t postman-newman-demo .
+```
+```bash 
 docker run --rm postman-newman-demo
 ```
