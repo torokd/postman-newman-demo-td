@@ -29,6 +29,8 @@ npm install
 npm run test:api
 npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 ```
+npm run test:api test runs always in CI/CD for every merge
+
 3. If you would like to use directly newman commands you need to install newman first globally on your machine, after that you can run the official newman commands
 ```bash 
 npm install -g newman
@@ -47,3 +49,4 @@ cd postman-newman-demo-td
 docker build -t postman-newman-demo .
 docker run --rm postman-newman-demo
 ```
+
