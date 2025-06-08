@@ -1,16 +1,12 @@
 # 👋 Hi there! Welcome!
 
-So glad you're here! This little project is a playful, practical demo to help you get comfy with API testing using Postman and Newman. Whether you're learning, experimenting, or just browsing, you’re in the right place. 🚀
-
----
+So glad you're here! This little project is a playful, practical demo to help you get comfy with API testing using Postman and Newman. Whether you're learning, experimenting, or just browsing, you’re in the right place.
 
 ## 👀 What is this project?
 
 This is a Postman + Newman demo based on the public [DummyJSON](https://dummyjson.com) API — a free-to-use mock API created by a developer for learning and testing purposes. 
 
 📚 API documentation for DummyJSON is available here: [https://dummyjson.com/docs](https://dummyjson.com/docs)
-
----
 
 ## 🚀 Quick start
 
@@ -42,12 +38,14 @@ There are two main ways to use this project:
 - If you would like to run direct newman commands you must install newman globally first with command npm install -g newman if it is not working give an extra psuh with sudo. Then you are able to run direct newman commands like 
 newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 
-### Option 4 – Run it in docker container
+### Option 3 – Run it in docker container
 
 1. git clone https://github.com/torokd/postman-newman-demo-td.git
 
 2. cd postman-newman-demo-td
 
-3. docker build -t postman-newman-demo .
+3. ```bash
+docker build -t postman-newman-demo .
 
-4. docker run --rm postman-newman-demo
+4. ```bash
+docker run --rm postman-newman-demo
