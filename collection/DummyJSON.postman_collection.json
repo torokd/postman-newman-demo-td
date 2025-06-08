@@ -18,11 +18,17 @@
 							"script": {
 								"exec": [
 									"// Response body parsing and setting collection variables",
-									"const responseBody = pm.response.json();",
-									"const accessToken = responseBody.accessToken;",
-									"const refreshToken = responseBody.refreshToken;",
-									"pm.collectionVariables.set(\"accessToken\", accessToken);",
-									"pm.collectionVariables.set(\"refreshToken\", refreshToken);"
+									"const responseContent = pm.response.json();",
+									"pm.collectionVariables.set(\"accessToken\", responseContent.accessToken);",
+									"pm.collectionVariables.set(\"refreshToken\", responseContent.refreshToken);",
+									"",
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500 ms\", () => {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -69,6 +75,18 @@
 				},
 				{
 					"name": "Get all profile data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -145,13 +163,12 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"// Common tests",
-					"pm.test('Status code is 200', function () {",
+					"pm.test(\"Status code is 200\", () => {",
 					"    pm.response.to.have.status(200);",
 					"});",
 					"",
-					"pm.test(\"Response time is less than 800ms\", function () {",
-					"  pm.expect(pm.response.responseTime).to.be.below(800);",
+					"pm.test(\"Response time is less than 500 ms\", () => {",
+					"    pm.expect(pm.response.responseTime).to.be.below(500);",
 					"});"
 				]
 			}
