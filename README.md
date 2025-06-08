@@ -1,16 +1,12 @@
 # 👋 Hi there! Welcome!
-
 So glad you're here! This little project is a playful, practical demo to help you get comfy with API testing using Postman and Newman. Whether you're learning, experimenting, or just browsing, you’re in the right place.
 
 ## 👀 What is this project?
-
 This is a Postman + Newman demo based on the public [DummyJSON](https://dummyjson.com) API — a free-to-use mock API created by a developer for learning and testing purposes. 
 
 📚 API documentation for DummyJSON is available here: [https://dummyjson.com/docs](https://dummyjson.com/docs)
 
 ## 🚀 Quick start
-
-There are two main ways to use this project:
 
 ### Option 1 – Run it in postman
 
@@ -22,50 +18,32 @@ There are two main ways to use this project:
 4. You can run specific collections, directories or requests
 
 ### Option 2 – Run it with newman
-
+1. Clone the project and install dependencies
 ```bash 
 git clone https://github.com/torokd/postman-newman-demo-td.git
-```
-
-```bash 
 cd postman-newman-demo-td
-```
-
-```bash 
 npm install
 ```
-
-```bash npm run test:api
-```
-OR
+2. You have these 2 commands to run
 ```bash
+npm run test:api
 npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 ```
-OR 
-```bash 
-newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
-```
-Disclaimer: If you would like to run direct newman commands you must install newman globally first if it is not working give an extra psuh with sudo. Then you are able to run direct newman commands like this:
-
+3. If you would like to use directly newman commands you need to install newman first globally on your machine, after that you can run the official newman commands
 ```bash 
 npm install -g newman
-```
-OR
-```bash 
 sudo npm install -g newman
+newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 ```
 
 ### Option 3 – Run it in docker container
-
+1. Clone the project and install dependencies
 ```bash
 git clone https://github.com/torokd/postman-newman-demo-td.git
-```
-```bash 
 cd postman-newman-demo-td
 ```
+2. Build docker container and run the tests in it
 ```bash
 docker build -t postman-newman-demo .
-```
-```bash 
 docker run --rm postman-newman-demo
 ```
