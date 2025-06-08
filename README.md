@@ -33,19 +33,17 @@ There are two main ways to use this project:
 3. npm install
 
 4. Execute a test
-- npm run test:api
-- npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
+- ```bash npm run test:api
+- ```bash npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 - If you would like to run direct newman commands you must install newman globally first with command npm install -g newman if it is not working give an extra psuh with sudo. Then you are able to run direct newman commands like 
 newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 
 ### Option 3 – Run it in docker container
 
-1. git clone https://github.com/torokd/postman-newman-demo-td.git
+1. ``` git clone https://github.com/torokd/postman-newman-demo-td.git
 
-2. cd postman-newman-demo-td
+2. ```bash cd postman-newman-demo-td
 
-3. ```bash
-docker build -t postman-newman-demo .
+3. ```bash docker build -t postman-newman-demo .
 
-4. ```bash
-docker run --rm postman-newman-demo
+4. ```bash docker run --rm postman-newman-demo
