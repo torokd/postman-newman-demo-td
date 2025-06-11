@@ -4,7 +4,7 @@
 		"name": "DummyJSON",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18990643",
-		"_collection_link": "https://postman-demo-td.postman.co/workspace/postman_demo_td~f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-43db5799-aaaa-496e-991a-ee36c7bc5d23?action=share&source=collection_link&creator=18990643"
+		"_collection_link": "https://postman-demo-td.postman.co/workspace/f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-43db5799-aaaa-496e-991a-ee36c7bc5d23?action=share&source=collection_link&creator=18990643"
 	},
 	"item": [
 		{
@@ -17,17 +17,28 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"// Response body parsing and setting collection variables",
+									"// Response content parsing and setting collection variables",
 									"const responseContent = pm.response.json();",
-									"pm.collectionVariables.set(\"accessToken\", responseContent.accessToken);",
-									"pm.collectionVariables.set(\"refreshToken\", responseContent.refreshToken);",
+									"let accessToken = responseContent.accessToken;",
+									"let refreshToken = responseContent.refreshToken;",
+									"pm.collectionVariables.set(\"accessToken\", accessToken);",
+									"pm.collectionVariables.set(\"refreshToken\", refreshToken);",
 									"",
-									"pm.test(\"Status code is 200\", () => {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    pm.expect(responseContent).to.be.an('object');",
+									"    pm.expect(responseContent).to.have.all.keys('accessToken', 'refreshToken', 'id', 'username', 'email', 'firstName', 'lastName', 'gender', 'image');",
 									"});",
 									"",
-									"pm.test(\"Response time is less than 500 ms\", () => {",
-									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"pm.test(\"Response property type and business logic check\", function () {",
+									"    pm.expect(responseContent.accessToken).to.be.a('string');",
+									"    pm.expect(responseContent.refreshToken).to.be.a('string');",
+									"    pm.expect(responseContent.id).to.be.a('number');",
+									"    pm.expect(responseContent.username).to.be.a('string');",
+									"    pm.expect(responseContent.email).to.be.a('string');",
+									"    pm.expect(responseContent.firstName).to.be.a('string');",
+									"    pm.expect(responseContent.lastName).to.be.a('string');",
+									"    pm.expect(responseContent.gender).to.be.a('string');",
+									"    pm.expect(responseContent.image).to.be.a('string');",
 									"});"
 								],
 								"type": "text/javascript",
@@ -85,6 +96,40 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    pm.expect(responseContent).to.be.an('object').that.is.not.undefined;",
+									"    pm.expect(responseContent).to.have.all.keys(",
+									"        'id', 'firstName', 'lastName', 'maidenName', 'age', 'gender', ",
+									"        'email', 'phone', 'username', 'password', 'birthDate', 'image', ",
+									"        'bloodGroup', 'height', 'weight', 'eyeColor', 'hair', 'ip', ",
+									"        'address', 'macAddress', 'university', 'bank', 'company', ",
+									"        'ein', 'ssn', 'userAgent', 'crypto', 'role'",
+									"    );",
+									"    pm.expect(responseContent).to.have.property('crypto').that.is.an('object').that.has.all.keys(",
+									"        'coin', 'wallet', 'network'",
+									"    );",
+									"    pm.expect(responseContent).to.have.property('address').that.is.an('object').that.has.all.keys(",
+									"        'address', 'city', 'state', 'stateCode', 'postalCode', 'coordinates', 'country'",
+									"    );",
+									"    pm.expect(responseContent.address.coordinates).to.be.an('object').that.has.all.keys(",
+									"        'lat', 'lng'",
+									"    );",
+									"});",
+									"",
+									"//pm.test(\"Response property type and business logic check\", function () {",
+									"//});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
@@ -115,6 +160,25 @@
 				},
 				{
 					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Assert the overall structure of the response",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    //TODO",
+									"});",
+									"",
+									"pm.test(\"Response property type and business logic check\", function () {",
+									"    //TODO",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -163,12 +227,14 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"pm.test(\"Status code is 200\", () => {",
+					"const localThreshold = Number(pm.collectionVariables.get(\"threshold\"));",
+					"",
+					"pm.test(\"Status code check\", () => {",
 					"    pm.response.to.have.status(200);",
 					"});",
 					"",
-					"pm.test(\"Response time is less than 500 ms\", () => {",
-					"    pm.expect(pm.response.responseTime).to.be.below(500);",
+					"pm.test(\"Response time is under the treshold\", () => {",
+					"    pm.expect(pm.response.responseTime).to.be.below(localThreshold);",
 					"});"
 				]
 			}
@@ -182,6 +248,11 @@
 		{
 			"key": "refreshToken",
 			"value": ""
+		},
+		{
+			"key": "threshold",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
