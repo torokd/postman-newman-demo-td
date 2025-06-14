@@ -4,7 +4,7 @@
 		"name": "DummyJSON",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18990643",
-		"_collection_link": "https://postman-demo-td.postman.co/workspace/f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-43db5799-aaaa-496e-991a-ee36c7bc5d23?action=share&source=collection_link&creator=18990643"
+		"_collection_link": "https://postman-demo-td.postman.co/workspace/postman_demo_td~f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-43db5799-aaaa-496e-991a-ee36c7bc5d23?action=share&source=collection_link&creator=18990643"
 	},
 	"item": [
 		{
@@ -251,7 +251,7 @@
 		},
 		{
 			"key": "threshold",
-			"value": "",
+			"value": "700",
 			"type": "string"
 		}
 	]

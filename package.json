@@ -4,8 +4,8 @@
   "description": "A simple project providing dummy JSON data for testing and prototyping.   Quickly access sample JSON objects, arrays, and structures for frontend or backend development.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test:api": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json"
+    "test:api": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json",
+    "test:apiwithallure": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r allure"
   },
   "keywords": [],
   "author": "",
