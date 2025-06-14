@@ -251,7 +251,7 @@
 		},
 		{
 			"key": "threshold",
-			"value": "700",
+			"value": "1000",
 			"type": "string"
 		}
 	]
