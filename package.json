@@ -5,12 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test:api": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json",
-    "test:apiwithallure": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r allure"
+    "test:api+cli": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r cli",
+    "test:api+csv": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r csv --reporter-csv-export=reports/report.csv",
+    "test:api+json": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r json --reporter-csv-export=reports/report.json",
+    "test:api+htmlextra": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r htmlextra --reporter-csv-export=reports/report.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "newman": "^6.2.0"
+    "newman": "^6.2.0",
+    "newman-reporter-csv": "^1.3.0",
+    "newman-reporter-htmlextra": "^1.23.1"
   }
 }
