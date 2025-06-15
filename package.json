@@ -4,11 +4,11 @@
   "description": "A simple project providing dummy JSON data for testing and prototyping.   Quickly access sample JSON objects, arrays, and structures for frontend or backend development.",
   "main": "index.js",
   "scripts": {
-    "test:api": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json",
-    "test:api+cli": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r cli",
-    "test:api+csv": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r csv --reporter-csv-export=reports/report.csv",
-    "test:api+json": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r json --reporter-csv-export=reports/report.json",
-    "test:api+htmlextra": "newman run ./collection/DummyJSON.postman_collection.json -e ./environment/Development.postman_environment.json -r htmlextra --reporter-csv-export=reports/report.html"
+    "test:api": "newman run ./collections/DummyJSON.postman_collection.json -e ./environments/Development.postman_environment.json",
+    "test:api+cli": "newman run ./collections/DummyJSON.postman_collection.json -e ./environments/Development.postman_environment.json -r cli",
+    "test:api+csv": "newman run ./collections/DummyJSON.postman_collection.json -e ./environments/Development.postman_environment.json -r csv --reporter-csv-export=reports/report.csv",
+    "test:api+json": "newman run ./collections/DummyJSON.postman_collection.json -e ./environments/Development.postman_environment.json -r json --reporter-json-export=reports/report.json",
+    "test:api+htmlextra": "newman run ./collections/DummyJSON.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html"
   },
   "keywords": [],
   "author": "",
