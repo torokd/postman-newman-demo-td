@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "0ba23a02-1428-497d-b472-c13a28607fbf",
+		"name": "Smoke",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18990643",
+		"_collection_link": "https://postman-demo-td.postman.co/workspace/postman_demo_td~f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-0ba23a02-1428-497d-b472-c13a28607fbf?action=share&source=collection_link&creator=18990643"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Response content parsing and setting collection variables",
+									"const responseContent = pm.response.json();",
+									"let accessToken = responseContent.accessToken;",
+									"let refreshToken = responseContent.refreshToken;",
+									"pm.collectionVariables.set(\"accessToken\", accessToken);",
+									"pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+									"",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    pm.expect(responseContent).to.be.an('object');",
+									"    pm.expect(responseContent).to.have.all.keys('accessToken', 'refreshToken', 'id', 'username', 'email', 'firstName', 'lastName', 'gender', 'image');",
+									"});",
+									"",
+									"pm.test(\"Response property type and business logic check\", function () {",
+									"    pm.expect(responseContent.accessToken).to.be.a('string');",
+									"    pm.expect(responseContent.refreshToken).to.be.a('string');",
+									"    pm.expect(responseContent.id).to.be.a('number');",
+									"    pm.expect(responseContent.username).to.be.a('string');",
+									"    pm.expect(responseContent.email).to.be.a('string');",
+									"    pm.expect(responseContent.firstName).to.be.a('string');",
+									"    pm.expect(responseContent.lastName).to.be.a('string');",
+									"    pm.expect(responseContent.gender).to.be.a('string');",
+									"    pm.expect(responseContent.image).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"emilys\",\n  \"password\": \"emilyspass\",\n  \"expiresInMins\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all profile data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    pm.expect(responseContent).to.be.an('object').that.is.not.undefined;",
+									"    pm.expect(responseContent).to.have.all.keys(",
+									"        'id', 'firstName', 'lastName', 'maidenName', 'age', 'gender', ",
+									"        'email', 'phone', 'username', 'password', 'birthDate', 'image', ",
+									"        'bloodGroup', 'height', 'weight', 'eyeColor', 'hair', 'ip', ",
+									"        'address', 'macAddress', 'university', 'bank', 'company', ",
+									"        'ein', 'ssn', 'userAgent', 'crypto', 'role'",
+									"    );",
+									"    pm.expect(responseContent).to.have.property('crypto').that.is.an('object').that.has.all.keys(",
+									"        'coin', 'wallet', 'network'",
+									"    );",
+									"    pm.expect(responseContent).to.have.property('address').that.is.an('object').that.has.all.keys(",
+									"        'address', 'city', 'state', 'stateCode', 'postalCode', 'coordinates', 'country'",
+									"    );",
+									"    pm.expect(responseContent.address.coordinates).to.be.an('object').that.has.all.keys(",
+									"        'lat', 'lng'",
+									"    );",
+									"});",
+									"",
+									"//pm.test(\"Response property type and business logic check\", function () {",
+									"//});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/auth/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Assert the overall structure of the response",
+									"pm.test(\"Response contains expected properties\", function () {",
+									"    //TODO",
+									"});",
+									"",
+									"pm.test(\"Response property type and business logic check\", function () {",
+									"    //TODO",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\",\n  \"expiresInMins\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/refresh",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
