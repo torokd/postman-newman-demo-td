@@ -11,7 +11,8 @@
     "test:smoke:dev:cli": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r cli",
     "test:smoke:dev:csv": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r csv --reporter-csv-export=reports/report.csv",
     "test:smoke:dev:json": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r json --reporter-json-export=reports/report.json",
-    "test:smoke:dev:html": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html"
+    "test:smoke:dev:html": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html",
+    "test:dani": "newman run \"./collections/Dummy json.postman_collection.json\" -e ./environments/Development.postman_environment.json --grep \"@smoke\""
   },
   "keywords": [],
   "author": "",
