@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "8d69bc5d-c392-4496-9689-e5cc6d92a29b",
-		"name": "Regression scope",
+		"name": "Regression",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18990643",
 		"_collection_link": "https://postman-demo-td.postman.co/workspace/postman_demo_td~f40b4c32-ea51-4ccd-8987-1d10d27ef52b/collection/18990643-8d69bc5d-c392-4496-9689-e5cc6d92a29b?action=share&source=collection_link&creator=18990643"
@@ -209,6 +209,38 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Products v1",
+			"item": []
+		},
+		{
+			"name": "Carts v1",
+			"item": []
+		},
+		{
+			"name": "Recipes v1",
+			"item": []
+		},
+		{
+			"name": "Users v1",
+			"item": []
+		},
+		{
+			"name": "Posts v1",
+			"item": []
+		},
+		{
+			"name": "Comments v1",
+			"item": []
+		},
+		{
+			"name": "Todos v1",
+			"item": []
+		},
+		{
+			"name": "Quotes v1",
+			"item": []
 		}
 	],
 	"event": [
