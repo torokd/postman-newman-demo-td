@@ -1,4 +1,4 @@
-name: API tests with Newman 
+name: API tests with Newman
 
 on:
   push:
