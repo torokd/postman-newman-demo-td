@@ -2060,7 +2060,13 @@
 									"    \"additionalProperties\": false",
 									"};",
 									"",
-									"pm.test(\"Validate JSON response by schema\", () => {",
+									"pm.test(\"The product ID has been changed\", () => {",
+									"    const requestContent = pm.request.body.toJSON();",
+									"",
+									"    const originalId = requestContent.id;",
+									"    const newId = responseContent.id;",
+									"",
+									"    pm.expect(newId).to.not.equal(originalId);",
 									"});",
 									"",
 									"pm.test(\"Validate JSON response by schema\", () => {",
@@ -2104,51 +2110,6 @@
 					"response": []
 				},
 				{
-					"name": "Update product",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"Dior J'adore +222\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/products/?={{randomisedProductId}}",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"products",
-								""
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "{{randomisedProductId}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Patch product",
 					"event": [
 						{
@@ -2160,6 +2121,81 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"stock\",",
+									"        \"rating\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"description\",",
+									"        \"category\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
@@ -2167,7 +2203,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"phoneDani HEHE\",\n  \"price\": 65000\n}",
+							"raw": "{\n    \"title\": \"Changed value\",\n    \"price\": 999.99,\n    \"discountPercentage\": 5.55,\n    \"stock\": 999,\n    \"rating\": 4.7,\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/groceries/fish-steak/1.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp\",\n    \"description\": \"Quality fish steak, suitable for grilling, baking, or pan-searing.\",\n    \"category\": \"groceries\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
