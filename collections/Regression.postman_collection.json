@@ -859,16 +859,33 @@
 							"script": {
 								"exec": [
 									"const responseContent = pm.response.json();",
-									"pm.test(\"Response matches the schema\", function () {",
-									"        const schema = {",
-									"            \"type\": \"array\",",
-									"            \"items\": {",
-									"                \"type\": \"string\"",
-									"            }",
-									"        };",
-									"    ",
-									"    pm.expect(tv4.validate(responseContent, schema), tv4.error?.message || 'Schema validation failed').to.be.true;",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"array\",",
+									"    \"items\": {",
+									"        \"type\": \"string\"",
+									"    }",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -898,9 +915,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const maximumNumberOfProducts = 30;",
-									"let randomNumber = Math.floor(Math.random() * maximumNumberOfProducts) + 1;",
-									"pm.variables.set(\"randomisedProductId\", randomNumber);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1099,19 +1114,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/products/:randomisedProductId",
+							"raw": "{{baseURL}}/products/{{randomisedProductId}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								":randomisedProductId"
-							],
-							"variable": [
-								{
-									"key": "randomisedProductId",
-									"value": "{{randomisedProductId}}"
-								}
+								"{{randomisedProductId}}"
 							]
 						}
 					},
@@ -1124,16 +1133,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const randomNamePool = [",
-									"    \"Phone\",",
-									"    \"Mascara\",",
-									"    \"Nail\",",
-									"    \"Coco\"",
-									"];",
-									"",
-									"const rolledRandomName = randomNamePool[Math.floor(Math.random() * randomNamePool.length)];",
-									"",
-									"pm.variables.set(\"randomisedProductName\", rolledRandomName);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1356,7 +1356,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/products/search?q={{randomisedProductName}}",
+							"raw": "{{baseURL}}/products/search?q={{randomisedSearchKeyword}}",
 							"host": [
 								"{{baseURL}}"
 							],
@@ -1367,7 +1367,7 @@
 							"query": [
 								{
 									"key": "q",
-									"value": "{{randomisedProductName}}"
+									"value": "{{randomisedSearchKeyword}}"
 								}
 							]
 						}
@@ -1381,16 +1381,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const randomCategoryPool = [",
-									"    \"laptops\",",
-									"    \"mens-shirts\",",
-									"    \"mens-shoes\",",
-									"    \"mens-watches\"",
-									"];",
-									"",
-									"const rolledRandomCategory = randomCategoryPool[Math.floor(Math.random() * randomCategoryPool.length)];",
-									"",
-									"pm.variables.set(\"randomisedCategoryName\", rolledRandomCategory);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1613,20 +1604,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/products/category/:categoryName",
+							"raw": "{{baseURL}}/products/category/{{randomisedProductCategoryName}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
 								"category",
-								":categoryName"
-							],
-							"variable": [
-								{
-									"key": "categoryName",
-									"value": "{{randomisedCategoryName}}"
-								}
+								"{{randomisedProductCategoryName}}"
 							]
 						}
 					},
@@ -1693,6 +1678,8 @@
 									"    ],",
 									"    \"additionalProperties\": false",
 									"};",
+									"",
+									"",
 									"",
 									"pm.test(\"Validate JSON response by schema\", () => {",
 									"    pm.response.to.have.jsonSchema(expectedSchema);",
@@ -2006,8 +1993,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const randomNumber = Math.floor(Math.random() * 30) + 1;",
-									"pm.variables.set(\"randomizedProductId\", randomNumber);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -2017,13 +2003,75 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const requestBody = JSON.parse(pm.request.body.raw);",
-									"const responseBody = pm.response.json();",
+									"const responseContent = pm.response.json();",
 									"",
-									"pm.test(\"Request title matches response title\", function () {",
-									"    pm.expect(requestBody.title).to.equal(responseBody.title);",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"stock\",",
+									"        \"rating\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"description\",",
+									"        \"category\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
 									"});",
-									""
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -2035,7 +2083,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": 9999,\n  \"title\": \"Organic Dog Biscuits\",\n  \"description\": \"Crunchy and healthy organic dog biscuits with natural ingredients.\",\n  \"category\": \"pet-supplies\",\n  \"price\": 14.99,\n  \"discountPercentage\": 5.5,\n  \"rating\": 4.2,\n  \"stock\": 120,\n  \"tags\": [\n    \"dog\",\n    \"treats\",\n    \"organic\"\n  ],\n  \"sku\": \"PET-DOG-TREAT-001\",\n  \"weight\": 1.2,\n  \"dimensions\": {\n    \"width\": 12.5,\n    \"height\": 20.0,\n    \"depth\": 6.8\n  },\n  \"warrantyInformation\": \"No warranty provided for consumables.\",\n  \"shippingInformation\": \"Ships within 2-3 business days.\",\n  \"availabilityStatus\": \"In Stock\",\n  \"reviews\": [\n    {\n      \"rating\": 5,\n      \"comment\": \"My dog loves these treats, will buy again!\",\n      \"date\": \"2025-05-10T14:22:00.000Z\",\n      \"reviewerName\": \"Emily Carter\",\n      \"reviewerEmail\": \"emily.carter@x.dummyjson.com\"\n    },\n    {\n      \"rating\": 4,\n      \"comment\": \"Good quality, but a bit pricey.\",\n      \"date\": \"2025-05-12T10:05:00.000Z\",\n      \"reviewerName\": \"Daniel Wright\",\n      \"reviewerEmail\": \"daniel.wright@x.dummyjson.com\"\n    },\n    {\n      \"rating\": 5,\n      \"comment\": \"Perfect size for training treats!\",\n      \"date\": \"2025-05-14T18:45:00.000Z\",\n      \"reviewerName\": \"Sophia Lopez\",\n      \"reviewerEmail\": \"sophia.lopez@x.dummyjson.com\"\n    }\n  ],\n  \"returnPolicy\": \"30-day return policy (unopened packages only).\",\n  \"minimumOrderQuantity\": 5,\n  \"meta\": {\n    \"createdAt\": \"2025-05-01T09:00:00.000Z\",\n    \"updatedAt\": \"2025-05-14T09:00:00.000Z\",\n    \"barcode\": \"1234567890123\",\n    \"qrCode\": \"https://cdn.dummyjson.com/public/qr-code.png\"\n  },\n  \"images\": [\n    \"https://cdn.dummyjson.com/product-images/pet-supplies/dog-treats/1.webp\",\n    \"https://cdn.dummyjson.com/product-images/pet-supplies/dog-treats/2.webp\"\n  ],\n  \"thumbnail\": \"https://cdn.dummyjson.com/product-images/pet-supplies/dog-treats/thumbnail.webp\"\n}",
+							"raw": "{\n    \"id\": 15,\n    \"title\": \"Wooden Bathroom Sink With Mirror\",\n    \"description\": \"The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.\",\n    \"category\": \"furniture\",\n    \"price\": 799.99,\n    \"discountPercentage\": 8.8,\n    \"rating\": 3.59,\n    \"stock\": 7,\n    \"tags\": [\n        \"furniture\",\n        \"bathroom\"\n    ],\n    \"brand\": \"Bath Trends\",\n    \"sku\": \"FUR-BAT-WOO-015\",\n    \"weight\": 10,\n    \"dimensions\": {\n        \"width\": 7.98,\n        \"height\": 8.88,\n        \"depth\": 28.46\n    },\n    \"warrantyInformation\": \"3 year warranty\",\n    \"shippingInformation\": \"Ships in 3-5 business days\",\n    \"availabilityStatus\": \"Low Stock\",\n    \"reviews\": [\n        {\n            \"rating\": 4,\n            \"comment\": \"Fast shipping!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Logan Torres\",\n            \"reviewerEmail\": \"logan.torres@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 5,\n            \"comment\": \"Very pleased!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Aria Parker\",\n            \"reviewerEmail\": \"aria.parker@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 3,\n            \"comment\": \"Poor quality!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Dylan Wells\",\n            \"reviewerEmail\": \"dylan.wells@x.dummyjson.com\"\n        }\n    ],\n    \"returnPolicy\": \"60 days return policy\",\n    \"minimumOrderQuantity\": 2,\n    \"meta\": {\n        \"createdAt\": \"2025-04-30T09:41:02.053Z\",\n        \"updatedAt\": \"2025-04-30T09:41:02.053Z\",\n        \"barcode\": \"1958104402873\",\n        \"qrCode\": \"https://cdn.dummyjson.com/public/qr-code.png\"\n    },\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/3.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2062,9 +2110,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const maximumNumberOfProducts = 30;",
-									"let randomNumber = Math.floor(Math.random() * maximumNumberOfProducts) + 1;",
-									"pm.variables.set(\"randomisedProductId\", randomNumber);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -2109,8 +2155,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const randomNumber = Math.floor(Math.random() * 30) + 1;",
-									"pm.variables.set(\"randomizedProductId\", randomNumber);"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -2149,8 +2194,208 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const randomNumber = Math.floor(Math.random() * 30) + 1;",
-									"pm.variables.set(\"randomizedProductId\", randomNumber);"
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"tags\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"sku\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"weight\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"dimensions\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"width\": {",
+									"                    \"type\": \"number\"",
+									"                },",
+									"                \"height\": {",
+									"                    \"type\": \"number\"",
+									"                },",
+									"                \"depth\": {",
+									"                    \"type\": \"number\"",
+									"                }",
+									"            },",
+									"            \"required\": [",
+									"                \"width\",",
+									"                \"height\",",
+									"                \"depth\"",
+									"            ],",
+									"            \"additionalProperties\": false",
+									"        },",
+									"        \"warrantyInformation\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"shippingInformation\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"availabilityStatus\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"reviews\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"rating\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"comment\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"date\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviewerName\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviewerEmail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"rating\",",
+									"                    \"comment\",",
+									"                    \"date\",",
+									"                    \"reviewerName\",",
+									"                    \"reviewerEmail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"returnPolicy\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"minimumOrderQuantity\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"meta\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"createdAt\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"updatedAt\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"barcode\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"qrCode\": {",
+									"                    \"type\": \"string\"",
+									"                }",
+									"            },",
+									"            \"required\": [",
+									"                \"createdAt\",",
+									"                \"updatedAt\",",
+									"                \"barcode\",",
+									"                \"qrCode\"",
+									"            ],",
+									"            \"additionalProperties\": false",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"isDeleted\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"deletedOn\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"description\",",
+									"        \"category\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"rating\",",
+									"        \"stock\",",
+									"        \"tags\",",
+									"        \"sku\",",
+									"        \"weight\",",
+									"        \"dimensions\",",
+									"        \"warrantyInformation\",",
+									"        \"shippingInformation\",",
+									"        \"availabilityStatus\",",
+									"        \"reviews\",",
+									"        \"returnPolicy\",",
+									"        \"minimumOrderQuantity\",",
+									"        \"meta\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"isDeleted\",",
+									"        \"deletedOn\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Response has isDeleted and deletedDate flags\", function () {",
+									"    pm.expect(responseContent).to.have.property(\"isDeleted\");",
+									"    pm.expect(responseContent).to.have.property(\"deletedOn\");",
+									"});",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -2170,17 +2415,65 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products/1",
+							"raw": "{{baseURL}}/products/{{randomisedProductId}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"1"
+								"{{randomisedProductId}}"
 							]
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"// This codeblock is for generating random product id for the products and assign it to a folder level variable",
+							"const maximumNumberOfProducts = 30;",
+							"const randomisedProductId = Math.floor(Math.random() * maximumNumberOfProducts) + 1;",
+							"pm.variables.set(\"randomisedProductId\", randomisedProductId);",
+							"console.log(`INFO LEVEL: The randomised product id is ${randomisedProductId}.`);",
+							"",
+							"// This codeblock is for generating random product category and assign it to a folder level variable",
+							"const productCategoryPool = [",
+							"    \"laptops\",",
+							"    \"mens-shirts\",",
+							"    \"mens-shoes\",",
+							"    \"mens-watches\",",
+							"];",
+							"const randomisedProductCategoryName = productCategoryPool[Math.floor(Math.random() * productCategoryPool.length)];",
+							"pm.variables.set(\"randomisedProductCategoryName\", randomisedProductCategoryName);",
+							"console.log(`INFO LEVEL: The randomised product category is ${randomisedProductCategoryName}.`);",
+							"",
+							"// This codeblock is for generating random search keyword and assign it to a folder level variable",
+							"const searchKeywordPool = [",
+							"    \"Phone\",",
+							"    \"Mascara\",",
+							"    \"Nail\",",
+							"    \"Coco\"",
+							"];",
+							"const randomisedSearchKeyword = searchKeywordPool[Math.floor(Math.random() * searchKeywordPool.length)];",
+							"pm.variables.set(\"randomisedSearchKeyword\", randomisedSearchKeyword);",
+							"console.log(`INFO LEVEL: The randomised search keyword is ${randomisedSearchKeyword}.`);"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -2230,31 +2523,32 @@
 				"type": "text/javascript",
 				"packages": {},
 				"exec": [
-					"const localThreshold = Number(pm.collectionVariables.get(\"threshold\"));",
+					"const responseTimeThreshold = Number(pm.collectionVariables.get(\"responseTimeThreshold\"));",
 					"",
 					"pm.test(\"Status code check\", () => {",
 					"    switch (pm.request.method) {",
 					"        case \"GET\":",
-					"            pm.response.to.have.status(200);",
+					"            pm.expect([200, 201]).to.include(pm.response.code);",
 					"            break;",
-					"",
 					"        case \"POST\":",
 					"            pm.expect([200, 201]).to.include(pm.response.code);",
 					"            break;",
-					"",
 					"        case \"PATCH\":",
+					"            pm.expect([200, 201]).to.include(pm.response.code);",
+					"            break;",
 					"        case \"PUT\":",
+					"            pm.expect([200, 201]).to.include(pm.response.code);",
+					"            break;",
 					"        case \"DELETE\":",
 					"            pm.expect([200, 204]).to.include(pm.response.code);",
 					"            break;",
-					"",
 					"        default:",
 					"            console.warn(`⚠️ No status code rule defined for method: ${pm.request.method}`);",
 					"    }",
 					"});",
 					"",
 					"pm.test(\"Response time is under the threshold\", () => {",
-					"    pm.expect(pm.response.responseTime).to.be.below(localThreshold);",
+					"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 					"});",
 					""
 				]
@@ -2263,7 +2557,7 @@
 	],
 	"variable": [
 		{
-			"key": "threshold",
+			"key": "responseTimeThreshold",
 			"value": "700"
 		},
 		{
