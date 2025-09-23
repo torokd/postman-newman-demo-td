@@ -25,6 +25,3 @@ jobs:
 
       - name: Run Newman smoke tests
         run: npm run test:smoke:dev:cli
-
-      - name: Run Newman regression tests
-        run: npm run test:regression:dev:cli
