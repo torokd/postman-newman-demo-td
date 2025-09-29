@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Newman smoke tests
-        run: npm run test:smoke:dev:cli
+      - name: Run Newman smoke tests with access token
+        run: npm run test:smoke:dev:accessToken:cli
 
-      - name: Run Newman regression tests
-        run: npm run test:regression:dev:cli
+      - name: Run Newman smoke tests with refresh token
+        run: npm run test:smoke:dev:refreshToken:cli
