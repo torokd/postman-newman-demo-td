@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Run Newman smoke tests with access token
-        run: npm run test:smoke:dev:accessToken:cli
+        run: npm run smoke:dev:accessToken:cli
 
       - name: Run Newman smoke tests with refresh token
-        run: npm run test:smoke:dev:refreshToken:cli
+        run: npm run smoke:dev:refreshToken:cli
