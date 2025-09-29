@@ -49,3 +49,7 @@ cd postman-newman-demo-td
 docker build -t postman-newman-demo .
 docker run --rm postman-newman-demo
 ```
+
+1. readmet ujrairni
+3. business test cases which for business logic
+2. Include positive & negative cases: invalid inputs, missing parameters, boundary values, timeouts, authorization failures, malformed JSON, etc.
