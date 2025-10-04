@@ -4,6 +4,8 @@ So glad you're here! This little project is a playful, practical demo to help yo
 ## 👀 What is this project?
 This is a Postman + Newman demo based on the public [DummyJSON](https://dummyjson.com) API — a free-to-use mock API created by a developer for learning and testing purposes. 
 
+This project is a semi-automated API testing imaginary project. The requirement was it should be comfortable for the manual and automated testers as well. I tried to make a project strucure and the user frameworks and tools to reach this goal.
+
 📚 API documentation for DummyJSON is available here: [https://dummyjson.com/docs](https://dummyjson.com/docs)
 
 ## 🚀 Quick start
