@@ -2,7 +2,6 @@ name: Nightly Docker run
 
 on:
   schedule:
-    # Minden este 22:00 UTC (pl. 23:00 magyar idő szerint nyáron)
     - cron: '0 22 * * *'
 
 jobs:
