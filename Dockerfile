@@ -3,4 +3,15 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-CMD npm run regression:dev:accessToken:cli && npm run regression:dev:refreshToken:cli
+
+ARG testingScope
+ARG environment
+ARG tokenType
+ARG reporting
+
+ENV testingScope=${testingScope}
+ENV environment=${environment}
+ENV tokenType=${tokenType}
+ENV reporting=${reporting}
+
+CMD ["sh", "-c", "npm run ${testingScope}:${environment}:${tokenType}:${reporting}"]
