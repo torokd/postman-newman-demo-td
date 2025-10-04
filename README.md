@@ -1,5 +1,5 @@
 # 👋 Hi there! Welcome!
-So glad you're here! This little project is a playful, practical demo to help you get comfy with API testing using Postman and Newman. Whether you're learning, experimenting, or just browsing, you’re in the right place.
+So glad you're here! This little project is a playful, practical demo to help you get comfy with API testing using Postman and Newman. Whether you're learning, experimenting, or just browsing, you’re in the right place. 
 
 ## 👀 What is this project?
 This is a Postman + Newman demo based on the public [DummyJSON](https://dummyjson.com) API — a free-to-use mock API created by a developer for learning and testing purposes. 
@@ -29,7 +29,7 @@ npm install
 npm run test:api
 npx newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json
 ```
-npm run test:api test runs always in CI/CD for every merge
+npm run test:api test runs always in CI/CD for every merge CICD integration TODO
 
 3. If you would like to use directly newman commands you need to install newman first globally on your machine, after that you can run the official newman commands
 ```bash 
@@ -50,6 +50,14 @@ docker build -t postman-newman-demo .
 docker run --rm postman-newman-demo
 ```
 
-1. kidolgozni a kulonbozo uzleti scenariokat, meg hozza kell parat -> invalid inputs, missing parameters, boundary values, timeouts, authorization failures, malformed JSON, etc.
 2. validaciokba betenni uzleti validaciokat is
-3. readme rewrite + docker implementacio
+3. readme rewrite + docker
+
+## 💡 Future ideas for imrpoving this project
+1. Adding negative cases for
+   1. Adding negative cases for missing tokens (currently the dummy project has no implementation for it)
+   2. Adding test cases for missing properties in the requests
+   3. Adding test cases for invalid format in the requests
+   4. Adding test cases for malformed json
+   5. Adding test cases for already deleted elements check (currently the json dummy project does not have any real DB so it's pointless at the moment)
+   6. Adding test cases for wrong content types
