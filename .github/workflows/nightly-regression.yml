@@ -27,7 +27,7 @@ jobs:
             -t regression-with-refreshtoken-image \
             --build-arg testingScope=regression \
             --build-arg environment=dev \
-            --build-arg tokenType=accessToken \
+            --build-arg tokenType=refreshToken \
             --build-arg reporting=cli \
             .
 
