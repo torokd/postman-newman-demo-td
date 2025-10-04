@@ -1,0 +1,15 @@
+name: Nightly Docker run
+
+on:
+  schedule:
+    # Minden este 22:00 UTC (pl. 23:00 magyar idő szerint nyáron)
+    - cron: '0 22 * * *'
+
+jobs:
+  run-nightly-docker:
+    runs-on: macos-latest
+
+    steps:
+      - name: Run Docker container
+        run: |
+          docker run --rm torokd/postman-newman-demo-td:latest
