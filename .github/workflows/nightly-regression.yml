@@ -9,6 +9,26 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Run Docker container
+      - name: Run regression with accessToken in docker
         run: |
-          docker run --rm torokd/postman-newman-demo-td:latest
+          docker build \
+            -t regression-with-accesstoken-image \
+            --build-arg testingScope=regression \
+            --build-arg environment=dev \
+            --build-arg tokenType=accessToken \
+            --build-arg reporting=cli \
+            .
+
+          docker run --rm regression-with-accesstoken-image
+        
+      - name: Run regression with refreshToken in docker
+        run: |
+          docker build \
+            -t regression-with-refreshtoken-image \
+            --build-arg testingScope=regression \
+            --build-arg environment=dev \
+            --build-arg tokenType=accessToken \
+            --build-arg reporting=cli \
+            .
+
+          docker run --rm regression-with-refreshtoken-image
