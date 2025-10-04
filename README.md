@@ -42,30 +42,44 @@ npm install -g newman
 newman run collection/DummyJSON.postman_collection.json -e environment/DummyJSON.postman_environment.json --env-var token={{accessToken}}
 ```
 
-### Option 3 – Run it in docker container
-1. Clone the project and install dependencies
+### Option 3 – Run it in DOCKER container
+
+1. We have dockerisation on the project. You can image any kind docker image with parameters and you can run them.
 ```bash
 git clone https://github.com/torokd/postman-newman-demo-td.git
 cd postman-newman-demo-td
 ```
-2. Build docker container and run the tests in it
+2. Here you can use:
+- testingScope: smoke, regression
+- environment: dev
+- tokenType: accessToken, refreshToken
+- reporting: cli, csv, json, html
 ```bash
-docker build -t postman-newman-demo .
-docker run --rm postman-newman-demo
+docker build \
+-t dockerimagename \
+--build-arg testingScope=regression \
+--build-arg environment=dev \
+--build-arg tokenType=accessToken \
+--build-arg reporting=html \
+.
 ```
+```bash
+docker run --rm dockerimagename
+```
+This will execute the appropriate NPM scipt based on the provided build arguments -> npm run regression:dev:accessToken:html (that will run the newman command defined in package.json)
 
-## 🤖 CI/CD integration
+### 🤖 CI/CD integration
 
 - merge-smoke.yml runs in the CI/CD:
    - smoke scope with access token
    - smoke scope with refresh token
 
-- nightly-regression, runs daily at 22:00 (dockerised):
+- nightly-regression.yml, runs daily at 22:00 (dockerised):
    - regression scope with access token
    - regression scope with refresh token
   
 
-## 💡 Future ideas for imrpoving this project
+### 💡 Future ideas for imrpoving this project
    - Adding negative cases for missing tokens (currently the dummy project has no implementation for it)
    - Adding test cases for missing properties in the requests
    - Adding test cases for invalid format in the requests
