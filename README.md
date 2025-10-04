@@ -67,3 +67,4 @@ You can set it up in the tests.yml, currently we have 2 jobs that runs for push 
    - Adding test cases for malformed json
    - Adding test cases for already deleted elements check (currently the json dummy project does not have any real DB so it's pointless at the moment)
    - Adding test cases for wrong content types
+   - Push it to automated and scheduled CI/CD and make the reporting webhooked to teams/slack/email
