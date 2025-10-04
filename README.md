@@ -79,7 +79,7 @@ This will execute the appropriate NPM scipt based on the provided build argument
    - regression scope with refresh token
   
 
-### 💡 Future ideas for imrpoving this project
+### 💡 Future ideas for improving this project
    - Adding negative cases for missing tokens (currently the dummy project has no implementation for it)
    - Adding test cases for missing properties in the requests
    - Adding test cases for invalid format in the requests
