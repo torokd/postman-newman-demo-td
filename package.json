@@ -4,6 +4,7 @@
   "description": "A simple project providing dummy JSON data for testing and prototyping.   Quickly access sample JSON objects, arrays, and structures for frontend or backend development.",
   "main": "index.js",
 "scripts": {
+    // Definition of scripts to run Postman collections in this form -> scope:environemnt:token:reporter
     "regression:dev:accessToken:cli": "newman run ./collections/Regression.postman_collection.json -e ./environments/Development.postman_environment.json -r cli --env-var token={{accessToken}}",
     "regression:dev:refreshToken:cli": "newman run ./collections/Regression.postman_collection.json -e ./environments/Development.postman_environment.json -r cli --env-var token={{refreshToken}}",
     "regression:dev:accessToken:csv": "newman run ./collections/Regression.postman_collection.json -e ./environments/Development.postman_environment.json -r csv --reporter-csv-export=reports/report.csv --env-var token={{accessToken}}",

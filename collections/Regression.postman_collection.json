@@ -21,8 +21,8 @@
 									"",
 									"const accessToken = responseContent.accessToken;",
 									"const refreshToken = responseContent.refreshToken;",
-									"pm.collectionVariables.set(\"accessToken\", accessToken);",
-									"pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+									"pm.environment.set(\"accessToken\", accessToken);",
+									"pm.environment.set(\"refreshToken\", refreshToken);",
 									"",
 									"const expectedSchema = {",
 									"    \"type\": \"object\",",
@@ -80,7 +80,8 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -90,7 +91,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -133,7 +135,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -442,7 +445,8 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -452,7 +456,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{accessToken}}",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -467,75 +471,6 @@
 							"path": [
 								"auth",
 								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Refresh token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseContent = pm.response.json();",
-									"",
-									"const expectedSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\": {",
-									"        \"accessToken\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"refreshToken\": {",
-									"            \"type\": \"string\"",
-									"        }",
-									"    },",
-									"    \"required\": [",
-									"        \"accessToken\",",
-									"        \"refreshToken\"",
-									"    ],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Validate JSON response by schema\", () => {",
-									"    pm.response.to.have.jsonSchema(expectedSchema);",
-									"",
-									"    const Ajv = require('ajv');",
-									"    const ajv = new Ajv();",
-									"    const validate = ajv.compile(expectedSchema);",
-									"    const valid = validate(responseContent);",
-									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\",\n  \"expiresInMins\": 30\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/auth/refresh",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"auth",
-								"refresh"
 							]
 						}
 					},
@@ -758,7 +693,8 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -768,7 +704,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{accessToken}}",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -831,11 +767,22 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -878,7 +825,8 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -888,11 +836,22 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -909,7 +868,7 @@
 					"response": []
 				},
 				{
-					"name": "Get specific product",
+					"name": "Get products by category existing category",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -918,225 +877,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseContent = pm.response.json();",
-									"",
-									"const expectedSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\": {",
-									"        \"id\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"title\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"description\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"category\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"price\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"discountPercentage\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"rating\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"stock\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"tags\": {",
-									"            \"type\": \"array\",",
-									"            \"items\": {",
-									"                \"type\": \"string\"",
-									"            }",
-									"        },",
-									"        \"brand\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"sku\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"weight\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"dimensions\": {",
-									"            \"type\": \"object\",",
-									"            \"properties\": {",
-									"                \"width\": {",
-									"                    \"type\": \"number\"",
-									"                },",
-									"                \"height\": {",
-									"                    \"type\": \"number\"",
-									"                },",
-									"                \"depth\": {",
-									"                    \"type\": \"number\"",
-									"                }",
-									"            },",
-									"            \"required\": [",
-									"                \"width\",",
-									"                \"height\",",
-									"                \"depth\"",
-									"            ],",
-									"            \"additionalProperties\": false",
-									"        },",
-									"        \"warrantyInformation\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"shippingInformation\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"availabilityStatus\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"reviews\": {",
-									"            \"type\": \"array\",",
-									"            \"items\": {",
-									"                \"type\": \"object\",",
-									"                \"properties\": {",
-									"                    \"rating\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"comment\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"date\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"reviewerName\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"reviewerEmail\": {",
-									"                        \"type\": \"string\"",
-									"                    }",
-									"                },",
-									"                \"required\": [",
-									"                    \"rating\",",
-									"                    \"comment\",",
-									"                    \"date\",",
-									"                    \"reviewerName\",",
-									"                    \"reviewerEmail\"",
-									"                ],",
-									"                \"additionalProperties\": false",
-									"            }",
-									"        },",
-									"        \"returnPolicy\": {",
-									"            \"type\": \"string\"",
-									"        },",
-									"        \"minimumOrderQuantity\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"meta\": {",
-									"            \"type\": \"object\",",
-									"            \"properties\": {",
-									"                \"createdAt\": {",
-									"                    \"type\": \"string\"",
-									"                },",
-									"                \"updatedAt\": {",
-									"                    \"type\": \"string\"",
-									"                },",
-									"                \"barcode\": {",
-									"                    \"type\": \"string\"",
-									"                },",
-									"                \"qrCode\": {",
-									"                    \"type\": \"string\"",
-									"                }",
-									"            },",
-									"            \"required\": [",
-									"                \"createdAt\",",
-									"                \"updatedAt\",",
-									"                \"barcode\",",
-									"                \"qrCode\"",
-									"            ],",
-									"            \"additionalProperties\": false",
-									"        },",
-									"        \"images\": {",
-									"            \"type\": \"array\",",
-									"            \"items\": {",
-									"                \"type\": \"string\"",
-									"            }",
-									"        },",
-									"        \"thumbnail\": {",
-									"            \"type\": \"string\"",
-									"        }",
-									"    },",
-									"    \"required\": [",
-									"        \"id\",",
-									"        \"title\",",
-									"        \"description\",",
-									"        \"category\",",
-									"        \"price\",",
-									"        \"discountPercentage\",",
-									"        \"rating\",",
-									"        \"stock\",",
-									"        \"tags\",",
-									"        \"sku\",",
-									"        \"weight\",",
-									"        \"dimensions\",",
-									"        \"warrantyInformation\",",
-									"        \"shippingInformation\",",
-									"        \"availabilityStatus\",",
-									"        \"reviews\",",
-									"        \"returnPolicy\",",
-									"        \"minimumOrderQuantity\",",
-									"        \"meta\",",
-									"        \"images\",",
-									"        \"thumbnail\"",
-									"    ],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Validate JSON response by schema\", () => {",
-									"    pm.response.to.have.jsonSchema(expectedSchema);",
-									"",
-									"    const Ajv = require('ajv');",
-									"    const ajv = new Ajv();",
-									"    const validate = ajv.compile(expectedSchema);",
-									"    const valid = validate(responseContent);",
-									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/products/{{randomisedProductId}}",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"products",
-								"{{randomisedProductId}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search product",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -1348,270 +1090,288 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/products/search?q={{randomisedSearchKeyword}}",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"products",
-								"search"
-							],
-							"query": [
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
-									"key": "q",
-									"value": "{{randomisedSearchKeyword}}"
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
 								}
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get products by category",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
 						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseContent = pm.response.json();",
-									"",
-									"const expectedSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\": {",
-									"        \"products\": {",
-									"            \"type\": \"array\",",
-									"            \"items\": {",
-									"                \"type\": \"object\",",
-									"                \"properties\": {",
-									"                    \"id\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"title\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"description\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"category\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"price\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"discountPercentage\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"rating\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"stock\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"tags\": {",
-									"                        \"type\": \"array\",",
-									"                        \"items\": {",
-									"                            \"type\": \"string\"",
-									"                        }",
-									"                    },",
-									"                    \"brand\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"sku\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"weight\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"dimensions\": {",
-									"                        \"type\": \"object\",",
-									"                        \"properties\": {",
-									"                            \"width\": {",
-									"                                \"type\": \"number\"",
-									"                            },",
-									"                            \"height\": {",
-									"                                \"type\": \"number\"",
-									"                            },",
-									"                            \"depth\": {",
-									"                                \"type\": \"number\"",
-									"                            }",
-									"                        },",
-									"                        \"required\": [",
-									"                            \"width\",",
-									"                            \"height\",",
-									"                            \"depth\"",
-									"                        ],",
-									"                        \"additionalProperties\": false",
-									"                    },",
-									"                    \"warrantyInformation\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"shippingInformation\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"availabilityStatus\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"reviews\": {",
-									"                        \"type\": \"array\",",
-									"                        \"items\": {",
-									"                            \"type\": \"object\",",
-									"                            \"properties\": {",
-									"                                \"rating\": {",
-									"                                    \"type\": \"number\"",
-									"                                },",
-									"                                \"comment\": {",
-									"                                    \"type\": \"string\"",
-									"                                },",
-									"                                \"date\": {",
-									"                                    \"type\": \"string\"",
-									"                                },",
-									"                                \"reviewerName\": {",
-									"                                    \"type\": \"string\"",
-									"                                },",
-									"                                \"reviewerEmail\": {",
-									"                                    \"type\": \"string\"",
-									"                                }",
-									"                            },",
-									"                            \"required\": [",
-									"                                \"rating\",",
-									"                                \"comment\",",
-									"                                \"date\",",
-									"                                \"reviewerName\",",
-									"                                \"reviewerEmail\"",
-									"                            ],",
-									"                            \"additionalProperties\": false",
-									"                        }",
-									"                    },",
-									"                    \"returnPolicy\": {",
-									"                        \"type\": \"string\"",
-									"                    },",
-									"                    \"minimumOrderQuantity\": {",
-									"                        \"type\": \"number\"",
-									"                    },",
-									"                    \"meta\": {",
-									"                        \"type\": \"object\",",
-									"                        \"properties\": {",
-									"                            \"createdAt\": {",
-									"                                \"type\": \"string\"",
-									"                            },",
-									"                            \"updatedAt\": {",
-									"                                \"type\": \"string\"",
-									"                            },",
-									"                            \"barcode\": {",
-									"                                \"type\": \"string\"",
-									"                            },",
-									"                            \"qrCode\": {",
-									"                                \"type\": \"string\"",
-									"                            }",
-									"                        },",
-									"                        \"required\": [",
-									"                            \"createdAt\",",
-									"                            \"updatedAt\",",
-									"                            \"barcode\",",
-									"                            \"qrCode\"",
-									"                        ],",
-									"                        \"additionalProperties\": false",
-									"                    },",
-									"                    \"images\": {",
-									"                        \"type\": \"array\",",
-									"                        \"items\": {",
-									"                            \"type\": \"string\"",
-									"                        }",
-									"                    },",
-									"                    \"thumbnail\": {",
-									"                        \"type\": \"string\"",
-									"                    }",
-									"                },",
-									"                \"required\": [",
-									"                    \"id\",",
-									"                    \"title\",",
-									"                    \"description\",",
-									"                    \"category\",",
-									"                    \"price\",",
-									"                    \"discountPercentage\",",
-									"                    \"rating\",",
-									"                    \"stock\",",
-									"                    \"tags\",",
-									"                    \"sku\",",
-									"                    \"weight\",",
-									"                    \"dimensions\",",
-									"                    \"warrantyInformation\",",
-									"                    \"shippingInformation\",",
-									"                    \"availabilityStatus\",",
-									"                    \"reviews\",",
-									"                    \"returnPolicy\",",
-									"                    \"minimumOrderQuantity\",",
-									"                    \"meta\",",
-									"                    \"images\",",
-									"                    \"thumbnail\"",
-									"                ],",
-									"                \"additionalProperties\": false",
-									"            }",
-									"        },",
-									"        \"total\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"skip\": {",
-									"            \"type\": \"number\"",
-									"        },",
-									"        \"limit\": {",
-									"            \"type\": \"number\"",
-									"        }",
-									"    },",
-									"    \"required\": [",
-									"        \"products\",",
-									"        \"total\",",
-									"        \"skip\",",
-									"        \"limit\"",
-									"    ],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Validate JSON response by schema\", () => {",
-									"    pm.response.to.have.jsonSchema(expectedSchema);",
-									"",
-									"    const Ajv = require('ajv');",
-									"    const ajv = new Ajv();",
-									"    const validate = ajv.compile(expectedSchema);",
-									"    const valid = validate(responseContent);",
-									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/products/category/{{randomisedProductCategoryName}}",
+							"raw": "{{baseURL}}/products/category/{{categoryName}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
 								"category",
-								"{{randomisedProductCategoryName}}"
+								"{{categoryName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products by category non-existing category",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"products\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"title\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"description\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"category\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"price\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountPercentage\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"rating\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"stock\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"tags\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"brand\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"sku\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"weight\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"dimensions\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"width\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"height\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"depth\": {",
+									"                                \"type\": \"number\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"width\",",
+									"                            \"height\",",
+									"                            \"depth\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"warrantyInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"shippingInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"availabilityStatus\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviews\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"rating\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"comment\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"date\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerName\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerEmail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"rating\",",
+									"                                \"comment\",",
+									"                                \"date\",",
+									"                                \"reviewerName\",",
+									"                                \"reviewerEmail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"returnPolicy\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"minimumOrderQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"meta\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"createdAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"updatedAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"barcode\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"qrCode\": {",
+									"                                \"type\": \"string\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"createdAt\",",
+									"                            \"updatedAt\",",
+									"                            \"barcode\",",
+									"                            \"qrCode\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"images\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"thumbnail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"title\",",
+									"                    \"description\",",
+									"                    \"category\",",
+									"                    \"price\",",
+									"                    \"discountPercentage\",",
+									"                    \"rating\",",
+									"                    \"stock\",",
+									"                    \"tags\",",
+									"                    \"sku\",",
+									"                    \"weight\",",
+									"                    \"dimensions\",",
+									"                    \"warrantyInformation\",",
+									"                    \"shippingInformation\",",
+									"                    \"availabilityStatus\",",
+									"                    \"reviews\",",
+									"                    \"returnPolicy\",",
+									"                    \"minimumOrderQuantity\",",
+									"                    \"meta\",",
+									"                    \"images\",",
+									"                    \"thumbnail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"products\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/category/nonexistingcategory",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"category",
+								"nonexistingcategory"
 							]
 						}
 					},
@@ -1692,7 +1452,8 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -1702,11 +1463,22 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1745,7 +1517,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -1957,11 +1730,22 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1987,7 +1771,7 @@
 					"response": []
 				},
 				{
-					"name": "Add new product",
+					"name": "Search product existing product",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -1996,7 +1780,528 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"products\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"title\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"description\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"category\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"price\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountPercentage\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"rating\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"stock\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"tags\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"brand\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"sku\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"weight\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"dimensions\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"width\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"height\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"depth\": {",
+									"                                \"type\": \"number\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"width\",",
+									"                            \"height\",",
+									"                            \"depth\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"warrantyInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"shippingInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"availabilityStatus\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviews\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"rating\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"comment\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"date\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerName\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerEmail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"rating\",",
+									"                                \"comment\",",
+									"                                \"date\",",
+									"                                \"reviewerName\",",
+									"                                \"reviewerEmail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"returnPolicy\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"minimumOrderQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"meta\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"createdAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"updatedAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"barcode\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"qrCode\": {",
+									"                                \"type\": \"string\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"createdAt\",",
+									"                            \"updatedAt\",",
+									"                            \"barcode\",",
+									"                            \"qrCode\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"images\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"thumbnail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"title\",",
+									"                    \"description\",",
+									"                    \"category\",",
+									"                    \"price\",",
+									"                    \"discountPercentage\",",
+									"                    \"rating\",",
+									"                    \"stock\",",
+									"                    \"tags\",",
+									"                    \"sku\",",
+									"                    \"weight\",",
+									"                    \"dimensions\",",
+									"                    \"warrantyInformation\",",
+									"                    \"shippingInformation\",",
+									"                    \"availabilityStatus\",",
+									"                    \"reviews\",",
+									"                    \"returnPolicy\",",
+									"                    \"minimumOrderQuantity\",",
+									"                    \"meta\",",
+									"                    \"images\",",
+									"                    \"thumbnail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"products\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/search?q={{searchKeyword}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{{searchKeyword}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search product non-existing product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"products\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"title\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"description\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"category\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"price\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountPercentage\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"rating\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"stock\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"tags\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"brand\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"sku\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"weight\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"dimensions\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"width\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"height\": {",
+									"                                \"type\": \"number\"",
+									"                            },",
+									"                            \"depth\": {",
+									"                                \"type\": \"number\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"width\",",
+									"                            \"height\",",
+									"                            \"depth\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"warrantyInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"shippingInformation\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"availabilityStatus\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviews\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"rating\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"comment\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"date\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerName\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"reviewerEmail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"rating\",",
+									"                                \"comment\",",
+									"                                \"date\",",
+									"                                \"reviewerName\",",
+									"                                \"reviewerEmail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"returnPolicy\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"minimumOrderQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"meta\": {",
+									"                        \"type\": \"object\",",
+									"                        \"properties\": {",
+									"                            \"createdAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"updatedAt\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"barcode\": {",
+									"                                \"type\": \"string\"",
+									"                            },",
+									"                            \"qrCode\": {",
+									"                                \"type\": \"string\"",
+									"                            }",
+									"                        },",
+									"                        \"required\": [",
+									"                            \"createdAt\",",
+									"                            \"updatedAt\",",
+									"                            \"barcode\",",
+									"                            \"qrCode\"",
+									"                        ],",
+									"                        \"additionalProperties\": false",
+									"                    },",
+									"                    \"images\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"string\"",
+									"                        }",
+									"                    },",
+									"                    \"thumbnail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"title\",",
+									"                    \"description\",",
+									"                    \"category\",",
+									"                    \"price\",",
+									"                    \"discountPercentage\",",
+									"                    \"rating\",",
+									"                    \"stock\",",
+									"                    \"tags\",",
+									"                    \"sku\",",
+									"                    \"weight\",",
+									"                    \"dimensions\",",
+									"                    \"warrantyInformation\",",
+									"                    \"shippingInformation\",",
+									"                    \"availabilityStatus\",",
+									"                    \"reviews\",",
+									"                    \"returnPolicy\",",
+									"                    \"minimumOrderQuantity\",",
+									"                    \"meta\",",
+									"                    \"images\",",
+									"                    \"thumbnail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"products\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/search?q=nonexistingcategory",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "nonexistingcategory"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new product with valid data",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -2080,16 +2385,27 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 15,\n    \"title\": \"Wooden Bathroom Sink With Mirror\",\n    \"description\": \"The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.\",\n    \"category\": \"furniture\",\n    \"price\": 799.99,\n    \"discountPercentage\": 8.8,\n    \"rating\": 3.59,\n    \"stock\": 7,\n    \"tags\": [\n        \"furniture\",\n        \"bathroom\"\n    ],\n    \"brand\": \"Bath Trends\",\n    \"sku\": \"FUR-BAT-WOO-015\",\n    \"weight\": 10,\n    \"dimensions\": {\n        \"width\": 7.98,\n        \"height\": 8.88,\n        \"depth\": 28.46\n    },\n    \"warrantyInformation\": \"3 year warranty\",\n    \"shippingInformation\": \"Ships in 3-5 business days\",\n    \"availabilityStatus\": \"Low Stock\",\n    \"reviews\": [\n        {\n            \"rating\": 4,\n            \"comment\": \"Fast shipping!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Logan Torres\",\n            \"reviewerEmail\": \"logan.torres@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 5,\n            \"comment\": \"Very pleased!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Aria Parker\",\n            \"reviewerEmail\": \"aria.parker@x.dummyjson.com\"\n        },\n        {\n            \"rating\": 3,\n            \"comment\": \"Poor quality!\",\n            \"date\": \"2025-04-30T09:41:02.053Z\",\n            \"reviewerName\": \"Dylan Wells\",\n            \"reviewerEmail\": \"dylan.wells@x.dummyjson.com\"\n        }\n    ],\n    \"returnPolicy\": \"60 days return policy\",\n    \"minimumOrderQuantity\": 2,\n    \"meta\": {\n        \"createdAt\": \"2025-04-30T09:41:02.053Z\",\n        \"updatedAt\": \"2025-04-30T09:41:02.053Z\",\n        \"barcode\": \"1958104402873\",\n        \"qrCode\": \"https://cdn.dummyjson.com/public/qr-code.png\"\n    },\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/3.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp\"\n}",
+							"raw": "{\n    \"id\": 15,\n    \"title\": \"Wooden Bathroom Sink With Mirror\",\n    \"description\": \"The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.\",\n    \"category\": \"furniture\",\n    \"price\": 799.99,\n    \"discountPercentage\": 8.8,\n    \"rating\": 3.59,\n    \"stock\": 7,\n    \"brand\": \"Bath Trends\",\n    \"sku\": \"FUR-BAT-WOO-015\",\n    \"weight\": 10,\n    \"dimensions\": {\n        \"width\": 7.98,\n        \"height\": 8.88,\n        \"depth\": 28.46\n    },\n    \"availabilityStatus\": \"Low Stock\",\n    \"returnPolicy\": \"60 days return policy\",\n    \"minimumOrderQuantity\": 2,\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/3.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2110,7 +2426,7 @@
 					"response": []
 				},
 				{
-					"name": "Patch product",
+					"name": "Add new product with invalid data",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -2119,7 +2435,143 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"stock\",",
+									"        \"rating\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"description\",",
+									"        \"category\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"The product ID has been changed\", () => {",
+									"    const requestContent = pm.request.body.toJSON();",
+									"",
+									"    const originalId = requestContent.id;",
+									"    const newId = responseContent.id;",
+									"",
+									"    pm.expect(newId).to.not.equal(originalId);",
+									"});",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 15,\n    \"title\": \"Wooden Bathroom Sink With Mirror\",\n    \"description\": \"The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.\",\n    \"category\": \"furniture\",\n    \"price\": 799.99,\n    \"discountPercentage\": 8.8,\n    \"rating\": 3.59,\n    \"stock\": 7,\n    \"brand\": \"Bath Trends\",\n    \"sku\": \"FUR-BAT-WOO-015\",\n    \"weight\": 10,\n    \"dimensions\": {\n        \"width\": 7.98,\n        \"height\": 8.88,\n        \"depth\": 28.46\n    },\n    \"availabilityStatus\": \"Low Stock\",\n    \"returnPolicy\": \"60 days return policy\",\n    \"minimumOrderQuantity\": 2,\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/1.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/2.webp\",\n        \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/3.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/products/add",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -2194,11 +2646,22 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -2211,20 +2674,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products/{{randomisedProductId}}",
+							"raw": "{{baseURL}}/products/{{productId}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"{{randomisedProductId}}"
+								"{{productId}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete product",
+					"name": "Update non-existing product",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -2233,7 +2696,134 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"stock\",",
+									"        \"rating\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"description\",",
+									"        \"category\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Changed value\",\n    \"price\": 999.99,\n    \"discountPercentage\": 5.55,\n    \"stock\": 999,\n    \"rating\": 4.7,\n    \"images\": [\n        \"https://cdn.dummyjson.com/product-images/groceries/fish-steak/1.webp\"\n    ],\n    \"thumbnail\": \"https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp\",\n    \"description\": \"Quality fish steak, suitable for grilling, baking, or pan-searing.\",\n    \"category\": \"groceries\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/products/{{productId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete existing product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -2434,11 +3024,22 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -2451,13 +3052,265 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products/{{randomisedProductId}}",
+							"raw": "{{baseURL}}/products/{{productId}}",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"{{randomisedProductId}}"
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete non-existing product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"title\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"description\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"category\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"price\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountPercentage\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"rating\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"stock\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"tags\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"brand\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"sku\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"weight\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"dimensions\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"width\": {",
+									"                    \"type\": \"number\"",
+									"                },",
+									"                \"height\": {",
+									"                    \"type\": \"number\"",
+									"                },",
+									"                \"depth\": {",
+									"                    \"type\": \"number\"",
+									"                }",
+									"            },",
+									"            \"required\": [",
+									"                \"width\",",
+									"                \"height\",",
+									"                \"depth\"",
+									"            ],",
+									"            \"additionalProperties\": false",
+									"        },",
+									"        \"warrantyInformation\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"shippingInformation\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"availabilityStatus\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"reviews\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"rating\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"comment\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"date\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviewerName\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"reviewerEmail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"rating\",",
+									"                    \"comment\",",
+									"                    \"date\",",
+									"                    \"reviewerName\",",
+									"                    \"reviewerEmail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"returnPolicy\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"minimumOrderQuantity\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"meta\": {",
+									"            \"type\": \"object\",",
+									"            \"properties\": {",
+									"                \"createdAt\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"updatedAt\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"barcode\": {",
+									"                    \"type\": \"string\"",
+									"                },",
+									"                \"qrCode\": {",
+									"                    \"type\": \"string\"",
+									"                }",
+									"            },",
+									"            \"required\": [",
+									"                \"createdAt\",",
+									"                \"updatedAt\",",
+									"                \"barcode\",",
+									"                \"qrCode\"",
+									"            ],",
+									"            \"additionalProperties\": false",
+									"        },",
+									"        \"images\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        },",
+									"        \"thumbnail\": {",
+									"            \"type\": \"string\"",
+									"        },",
+									"        \"isDeleted\": {",
+									"            \"type\": \"boolean\"",
+									"        },",
+									"        \"deletedOn\": {",
+									"            \"type\": \"string\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"title\",",
+									"        \"description\",",
+									"        \"category\",",
+									"        \"price\",",
+									"        \"discountPercentage\",",
+									"        \"rating\",",
+									"        \"stock\",",
+									"        \"tags\",",
+									"        \"sku\",",
+									"        \"weight\",",
+									"        \"dimensions\",",
+									"        \"warrantyInformation\",",
+									"        \"shippingInformation\",",
+									"        \"availabilityStatus\",",
+									"        \"reviews\",",
+									"        \"returnPolicy\",",
+									"        \"minimumOrderQuantity\",",
+									"        \"meta\",",
+									"        \"images\",",
+									"        \"thumbnail\",",
+									"        \"isDeleted\",",
+									"        \"deletedOn\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Response has isDeleted and deletedDate flags\", function () {",
+									"    pm.expect(responseContent).to.have.property(\"isDeleted\");",
+									"    pm.expect(responseContent).to.have.property(\"deletedOn\");",
+									"});",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"phoneDani HEHE\",\n  \"price\": 65000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/products/nonexistingproductid",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"nonexistingproductid"
 							]
 						}
 					},
@@ -2470,34 +3323,9 @@
 					"script": {
 						"type": "text/javascript",
 						"packages": {},
+						"requests": {},
 						"exec": [
-							"// This codeblock is for generating random product id for the products and assign it to a folder level variable",
-							"const maximumNumberOfProducts = 30;",
-							"const randomisedProductId = Math.floor(Math.random() * maximumNumberOfProducts) + 1;",
-							"pm.variables.set(\"randomisedProductId\", randomisedProductId);",
-							"console.log(`INFO LEVEL: The randomised product id is ${randomisedProductId}.`);",
-							"",
-							"// This codeblock is for generating random product category and assign it to a folder level variable",
-							"const productCategoryPool = [",
-							"    \"laptops\",",
-							"    \"mens-shirts\",",
-							"    \"mens-shoes\",",
-							"    \"mens-watches\",",
-							"];",
-							"const randomisedProductCategoryName = productCategoryPool[Math.floor(Math.random() * productCategoryPool.length)];",
-							"pm.variables.set(\"randomisedProductCategoryName\", randomisedProductCategoryName);",
-							"console.log(`INFO LEVEL: The randomised product category is ${randomisedProductCategoryName}.`);",
-							"",
-							"// This codeblock is for generating random search keyword and assign it to a folder level variable",
-							"const searchKeywordPool = [",
-							"    \"Phone\",",
-							"    \"Mascara\",",
-							"    \"Nail\",",
-							"    \"Coco\"",
-							"];",
-							"const randomisedSearchKeyword = searchKeywordPool[Math.floor(Math.random() * searchKeywordPool.length)];",
-							"pm.variables.set(\"randomisedSearchKeyword\", randomisedSearchKeyword);",
-							"console.log(`INFO LEVEL: The randomised search keyword is ${randomisedSearchKeyword}.`);"
+							""
 						]
 					}
 				},
@@ -2506,6 +3334,7 @@
 					"script": {
 						"type": "text/javascript",
 						"packages": {},
+						"requests": {},
 						"exec": [
 							""
 						]
@@ -2515,31 +3344,905 @@
 		},
 		{
 			"name": "Carts v1",
-			"item": []
-		},
-		{
-			"name": "Recipes v1",
-			"item": []
-		},
-		{
-			"name": "Users v1",
-			"item": []
-		},
-		{
-			"name": "Posts v1",
-			"item": []
-		},
-		{
-			"name": "Comments v1",
-			"item": []
-		},
-		{
-			"name": "Todos v1",
-			"item": []
-		},
-		{
-			"name": "Quotes v1",
-			"item": []
+			"item": [
+				{
+					"name": "Get all carts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"carts\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"products\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"id\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"title\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"price\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"quantity\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"total\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountPercentage\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountedTotal\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"thumbnail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"id\",",
+									"                                \"title\",",
+									"                                \"price\",",
+									"                                \"quantity\",",
+									"                                \"total\",",
+									"                                \"discountPercentage\",",
+									"                                \"discountedTotal\",",
+									"                                \"thumbnail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"total\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountedTotal\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"userId\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalProducts\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"products\",",
+									"                    \"total\",",
+									"                    \"discountedTotal\",",
+									"                    \"userId\",",
+									"                    \"totalProducts\",",
+									"                    \"totalQuantity\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"carts\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get valid cart data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"products\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"title\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"price\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"quantity\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"total\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountPercentage\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountedTotal\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"thumbnail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"title\",",
+									"                    \"price\",",
+									"                    \"quantity\",",
+									"                    \"total\",",
+									"                    \"discountPercentage\",",
+									"                    \"discountedTotal\",",
+									"                    \"thumbnail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountedTotal\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"userId\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"totalProducts\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"totalQuantity\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"products\",",
+									"        \"total\",",
+									"        \"discountedTotal\",",
+									"        \"userId\",",
+									"        \"totalProducts\",",
+									"        \"totalQuantity\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get invalid cart data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"id\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"products\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"title\": {",
+									"                        \"type\": \"string\"",
+									"                    },",
+									"                    \"price\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"quantity\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"total\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountPercentage\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountedTotal\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"thumbnail\": {",
+									"                        \"type\": \"string\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"title\",",
+									"                    \"price\",",
+									"                    \"quantity\",",
+									"                    \"total\",",
+									"                    \"discountPercentage\",",
+									"                    \"discountedTotal\",",
+									"                    \"thumbnail\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"discountedTotal\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"userId\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"totalProducts\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"totalQuantity\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"id\",",
+									"        \"products\",",
+									"        \"total\",",
+									"        \"discountedTotal\",",
+									"        \"userId\",",
+									"        \"totalProducts\",",
+									"        \"totalQuantity\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cart by existing user id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"carts\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"products\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"id\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"title\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"price\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"quantity\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"total\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountPercentage\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountedTotal\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"thumbnail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"id\",",
+									"                                \"title\",",
+									"                                \"price\",",
+									"                                \"quantity\",",
+									"                                \"total\",",
+									"                                \"discountPercentage\",",
+									"                                \"discountedTotal\",",
+									"                                \"thumbnail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"total\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountedTotal\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"userId\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalProducts\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"products\",",
+									"                    \"total\",",
+									"                    \"discountedTotal\",",
+									"                    \"userId\",",
+									"                    \"totalProducts\",",
+									"                    \"totalQuantity\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"carts\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyjson.com/carts/user/4",
+							"protocol": "https",
+							"host": [
+								"dummyjson",
+								"com"
+							],
+							"path": [
+								"carts",
+								"user",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cart by non-existing user id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseContent = pm.response.json();",
+									"",
+									"const expectedSchema = {",
+									"    \"type\": \"object\",",
+									"    \"properties\": {",
+									"        \"carts\": {",
+									"            \"type\": \"array\",",
+									"            \"items\": {",
+									"                \"type\": \"object\",",
+									"                \"properties\": {",
+									"                    \"id\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"products\": {",
+									"                        \"type\": \"array\",",
+									"                        \"items\": {",
+									"                            \"type\": \"object\",",
+									"                            \"properties\": {",
+									"                                \"id\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"title\": {",
+									"                                    \"type\": \"string\"",
+									"                                },",
+									"                                \"price\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"quantity\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"total\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountPercentage\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"discountedTotal\": {",
+									"                                    \"type\": \"number\"",
+									"                                },",
+									"                                \"thumbnail\": {",
+									"                                    \"type\": \"string\"",
+									"                                }",
+									"                            },",
+									"                            \"required\": [",
+									"                                \"id\",",
+									"                                \"title\",",
+									"                                \"price\",",
+									"                                \"quantity\",",
+									"                                \"total\",",
+									"                                \"discountPercentage\",",
+									"                                \"discountedTotal\",",
+									"                                \"thumbnail\"",
+									"                            ],",
+									"                            \"additionalProperties\": false",
+									"                        }",
+									"                    },",
+									"                    \"total\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"discountedTotal\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"userId\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalProducts\": {",
+									"                        \"type\": \"number\"",
+									"                    },",
+									"                    \"totalQuantity\": {",
+									"                        \"type\": \"number\"",
+									"                    }",
+									"                },",
+									"                \"required\": [",
+									"                    \"id\",",
+									"                    \"products\",",
+									"                    \"total\",",
+									"                    \"discountedTotal\",",
+									"                    \"userId\",",
+									"                    \"totalProducts\",",
+									"                    \"totalQuantity\"",
+									"                ],",
+									"                \"additionalProperties\": false",
+									"            }",
+									"        },",
+									"        \"total\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"skip\": {",
+									"            \"type\": \"number\"",
+									"        },",
+									"        \"limit\": {",
+									"            \"type\": \"number\"",
+									"        }",
+									"    },",
+									"    \"required\": [",
+									"        \"carts\",",
+									"        \"total\",",
+									"        \"skip\",",
+									"        \"limit\"",
+									"    ],",
+									"    \"additionalProperties\": false",
+									"};",
+									"",
+									"pm.test(\"Validate JSON response by schema\", () => {",
+									"    pm.response.to.have.jsonSchema(expectedSchema);",
+									"",
+									"    const Ajv = require('ajv');",
+									"    const ajv = new Ajv();",
+									"    const validate = ajv.compile(expectedSchema);",
+									"    const valid = validate(responseContent);",
+									"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://dummyjson.com/carts/user/4",
+							"protocol": "https",
+							"host": [
+								"dummyjson",
+								"com"
+							],
+							"path": [
+								"carts",
+								"user",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 11,\n    \"products\": [\n        {\n            \"id\": 144,\n            \"quantity\": 11,\n            \"price\": 1111,\n            \"discountPercentage\": 12.12\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/carts/add",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non-existing cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete existing cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete non-existing cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/carts/{{cartId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carts",
+								"{{cartId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							"// This codeblock is for generating random cart id for the products and assign it to a folder level variable",
+							"const maximumNumberOfCarts = 50;",
+							"const randomisedCartId = Math.floor(Math.random() * maximumNumberOfCarts) + 1;",
+							"pm.variables.set(\"randomisedCartId\", randomisedCartId);",
+							"console.log(`INFO LEVEL: The randomised cart id is ${randomisedCartId}.`);",
+							"",
+							"",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"event": [
@@ -2548,6 +4251,7 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
+				"requests": {},
 				"exec": [
 					""
 				]
@@ -2558,8 +4262,9 @@
 			"script": {
 				"type": "text/javascript",
 				"packages": {},
+				"requests": {},
 				"exec": [
-					"const responseTimeThreshold = Number(pm.collectionVariables.get(\"responseTimeThreshold\"));",
+					"const responseTimeThreshold = Number(pm.environment.get(\"responseTimeThreshold\"));",
 					"",
 					"pm.test(\"Status code check\", () => {",
 					"    switch (pm.request.method) {",
@@ -2586,23 +4291,17 @@
 					"pm.test(\"Response time is under the threshold\", () => {",
 					"    pm.expect(pm.response.responseTime).to.be.below(responseTimeThreshold);",
 					"});",
-					""
+					"",
+					"const validateResponseSchema = (schema, responseContent) => {",
+					"    const Ajv = require('ajv');",
+					"    const ajv = new Ajv();",
+					"    const validate = ajv.compile(schema);",
+					"    const valid = validate(responseContent);",
+					"",
+					"    pm.expect(valid, ajv.errorsText(validate.errors)).to.be.true;",
+					"};"
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "responseTimeThreshold",
-			"value": "700"
-		},
-		{
-			"key": "accessToken",
-			"value": ""
-		},
-		{
-			"key": "refreshToken",
-			"value": ""
 		}
 	]
 }

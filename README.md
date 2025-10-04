@@ -50,6 +50,6 @@ docker build -t postman-newman-demo .
 docker run --rm postman-newman-demo
 ```
 
-1. readmet ujrairni
-3. business test cases which for business logic
-2. Include positive & negative cases: invalid inputs, missing parameters, boundary values, timeouts, authorization failures, malformed JSON, etc.
+1. kidolgozni a kulonbozo uzleti scenariokat, meg hozza kell parat -> invalid inputs, missing parameters, boundary values, timeouts, authorization failures, malformed JSON, etc.
+2. validaciokba betenni uzleti validaciokat is
+3. readme rewrite + docker implementacio
