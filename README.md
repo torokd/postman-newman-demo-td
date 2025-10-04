@@ -55,12 +55,17 @@ docker run --rm postman-newman-demo
 ```
 
 ## 🤖 CI/CD integration
-You can set it up in the tests.yml, currently we have 2 jobs that runs for push and pull. 
-- smoke scope with access token
-- smoke scope with refresh token
+
+- merge-smoke.yml runs in the CI/CD:
+   - smoke scope with access token
+   - smoke scope with refresh token
+
+- nightly-regression, runs daily at 22:00 (dockerised):
+   - regression scope with access token
+   - regression scope with refresh token
+  
 
 ## 💡 Future ideas for imrpoving this project
-1. Adding negative cases for
    - Adding negative cases for missing tokens (currently the dummy project has no implementation for it)
    - Adding test cases for missing properties in the requests
    - Adding test cases for invalid format in the requests
