@@ -3131,7 +3131,7 @@
 					"        validate(responseContent);",
 					"    });",
 					"} else {",
-					"    console.warn(`⚠️ Skipped validation for ${pm.info.requestName}`);",
+					"    console.warn(`⚠️ Skipped EMPTY VALIDATION for ${pm.info.requestName}`);",
 					"}",
 					"",
 					"pm.test(\"Response time is under the threshold\", () => {",
