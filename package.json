@@ -19,7 +19,8 @@
     "smoke:dev:accessToken:json": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r json --reporter-json-export=reports/report.json --env-var token={{accessToken}}",
     "smoke:dev:refreshToken:json": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r json --reporter-json-export=reports/report.json --env-var token={{refreshToken}}",
     "smoke:dev:accessToken:html": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html --env-var token={{accessToken}}",
-    "smoke:dev:refreshToken:html": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html --env-var token={{refreshToken}}"
+    "smoke:dev:refreshToken:html": "newman run ./collections/Smoke.postman_collection.json -e ./environments/Development.postman_environment.json -r htmlextra --reporter-htmlextra-export=reports/report.html --env-var token={{refreshToken}}",
+    "docker:quickbuild": "docker build -t smoke-with-accesstoken-image --build-arg testingScope=smoke --build-arg environment=dev --build-arg tokenType=accessToken --build-arg reporting=html ."
 },
   "keywords": [],
   "author": "",

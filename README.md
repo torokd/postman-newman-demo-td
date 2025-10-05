@@ -65,10 +65,15 @@ docker build \
 --build-arg reporting=html \
 .
 ```
+This will execute the appropriate NPM scipt based on the provided build arguments -> npm run regression:dev:accessToken:html (that will run the newman command defined in package.json)
 ```bash
 docker run --rm dockerimagename
 ```
-This will execute the appropriate NPM scipt based on the provided build arguments -> npm run regression:dev:accessToken:html (that will run the newman command defined in package.json)
+
+There is a quick build setup in the package.json file for building a sample image via running the following command:
+```bash
+npm run docker:quickbuild
+```
 
 ### 🤖 CI/CD integration
 
@@ -89,3 +94,4 @@ This will execute the appropriate NPM scipt based on the provided build argument
    - Adding test cases for already deleted elements check (currently the json dummy project does not have any real DB so it's pointless at the moment)
    - Adding test cases for wrong content types
    - Push it to automated and scheduled CI/CD and make the reporting webhooked to teams/slack/email
+   - Adding more quick scripts to package.json for building up docker images
