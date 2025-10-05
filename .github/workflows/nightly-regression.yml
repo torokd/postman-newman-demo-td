@@ -6,10 +6,10 @@ on:
 
 jobs:
   run-nightly-docker:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Run regression with accessToken in docker
+      - name: Run regression with accesstoken in docker
         run: |
           docker build \
             -t regression-with-accesstoken-image \
@@ -21,7 +21,7 @@ jobs:
 
           docker run --rm regression-with-accesstoken-image
         
-      - name: Run regression with refreshToken in docker
+      - name: Run regression with refreshtoken in docker
         run: |
           docker build \
             -t regression-with-refreshtoken-image \
