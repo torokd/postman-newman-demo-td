@@ -103,3 +103,4 @@ npm run docker:quickbuild
    - Adding more quick scripts to package.json for building up docker images
    - Add more API endpoints from DUMMY JSON project
    - Add folders as run-parameters and make scripts for them
+   - Make the assertations prettier
