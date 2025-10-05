@@ -6,6 +6,12 @@ This is a Postman + Newman demo based on the public [DummyJSON](https://dummyjso
 
 This project is a semi-automated API testing imaginary project. The requirement was it should be comfortable for the manual and automated testers as well. I tried to make a project strucure and the user frameworks and tools to reach this goal.
 
+The content of the project is mostly:
+- Contract testing
+- Empty checks
+- Some business logic tests
+- Positive and negative scenarios
+
 📚 API documentation for DummyJSON is available here: [https://dummyjson.com/docs](https://dummyjson.com/docs)
 
 ## 🚀 Quick start
@@ -95,3 +101,5 @@ npm run docker:quickbuild
    - Adding test cases for wrong content types
    - Push it to automated and scheduled CI/CD and make the reporting webhooked to teams/slack/email
    - Adding more quick scripts to package.json for building up docker images
+   - Add more API endpoints from DUMMY JSON project
+   - Add folders as run-parameters and make scripts for them
