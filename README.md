@@ -18,12 +18,13 @@ The content of the project is mostly:
 
 ### Option 1 – Run it in postman
 
-1. Download the collection file:  
-   [`DummyJSON.postman_collection.json`](./collection/DummyJSON.postman_collection.json)
-2. Download the environment file:  
-   [`DummyJSON.postman_environment.json`](./environment/DummyJSON.postman_environment.json)
-3. Import both into Postman
-4. You can run specific collections, directories or requests
+1. Download the collection file:
+   collections/Smoke.postman_collection.json
+   collections/Regression.postman_collection.json
+3. Download the environment file:  
+   environments/Development.postman_environment.json
+4. Import both into Postman
+5. You can run specific collections, directories or requests
 
 ### Option 2 – Run it with newman
 
